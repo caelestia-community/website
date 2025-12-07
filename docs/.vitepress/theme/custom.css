@@ -1,0 +1,19 @@
+/* Custom CSS to emulate Illogical Impulsive aesthetic */
+
+:root {
+  --vp-c-brand-1: #cba6f7; /* Catppuccin Mauve/Lavender like tone */
+  --vp-c-brand-2: #b4befe;
+  --vp-c-brand-3: #cba6f7;
+  
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
+}
+
+.vp-doc h1 {
+    font-weight: 300;
+}
+
+/* Make the sidebar look cleaner */
+.VPSidebarItem.level-0 {
+    font-weight: 600;
+}
