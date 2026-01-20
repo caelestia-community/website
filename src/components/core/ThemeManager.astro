@@ -1,0 +1,153 @@
+---
+---
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+<script is:inline>
+    // Global State
+    window.themeState = {
+        theme: localStorage.getItem('theme') || 'default',
+    };
+
+    // --- Color Extraction Utilities ---
+    // RGB to Hex helper
+    const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('');
+
+    // Brighten/Darken helper for palette generation
+    const adjustColor = (hex, percent) => {
+        // strip the leading # if it's there
+        hex = hex.replace(/^\s*#|\s*$/g, '');
+
+        // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+        if (hex.length === 3) {
+            hex = hex.replace(/(.)/g, '$1$1');
+        }
+
+        var r = parseInt(hex.substr(0, 2), 16),
+            g = parseInt(hex.substr(2, 2), 16),
+            b = parseInt(hex.substr(4, 2), 16);
+
+        return '#' +
+            ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+            ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+            ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+    }
+    
+    // Hex to RGB space separated (for CSS generic vars)
+    const hexToRgbSpace = (hex) => {
+        hex = hex.replace(/^\s*#|\s*$/g, '');
+        if (hex.length === 3) hex = hex.replace(/(.)/g, '$1$1');
+        var r = parseInt(hex.substr(0, 2), 16),
+            g = parseInt(hex.substr(2, 2), 16),
+            b = parseInt(hex.substr(4, 2), 16);
+        return `${r} ${g} ${b}`;
+    }
+
+    window.updateAdaptiveTheme = (imageUrl) => {
+        if (!window.ColorThief || localStorage.getItem('theme') !== 'adaptive') return;
+
+        console.log('Generating adaptive theme from:', imageUrl);
+        
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = imageUrl;
+        
+        img.onload = () => {
+             try {
+                const colorThief = new ColorThief();
+                const palette = colorThief.getPalette(img, 5);
+                const dominant = palette[0]; // [r, g, b]
+                
+                const primaryColor = rgbToHex(dominant[0], dominant[1], dominant[2]);
+                // Generate a complementary or secondary color from palette or adjustments
+                const secondaryColor = palette[1] ? rgbToHex(palette[1][0], palette[1][1], palette[1][2]) : adjustColor(primaryColor, 20);
+                const accentColor = palette[2] ? rgbToHex(palette[2][0], palette[2][1], palette[2][2]) : adjustColor(primaryColor, -20);
+                
+                console.log('Extracted Palette:', { primaryColor, secondaryColor, accentColor });
+
+                document.documentElement.style.setProperty('--color-primary', hexToRgbSpace(primaryColor));
+                document.documentElement.style.setProperty('--color-secondary', hexToRgbSpace(secondaryColor));
+                document.documentElement.style.setProperty('--color-accent', hexToRgbSpace(accentColor));
+                
+             } catch (e) {
+                 console.warn('Color extraction failed (likely CORS):', e);
+                 // Fallback to default if fails
+             }
+        };
+        
+        img.onerror = () => {
+             console.warn('Could not load image for color extraction');
+        };
+    };
+
+    // --- Theme Manager ---
+    window.setTheme = (mode) => {
+        const html = document.documentElement;
+        
+        // Reset classes
+        const classes = Array.from(html.classList);
+        classes.forEach(c => {
+            if (c.startsWith('scheme-') || c.startsWith('variant-') || c === 'light' || c === 'official' || c === 'cyan' || c === 'adaptive') {
+                html.classList.remove(c);
+            }
+        });
+
+        // Clear inline styles if switching away from adaptive
+        if (mode !== 'adaptive') {
+            html.style.removeProperty('--color-primary');
+            html.style.removeProperty('--color-secondary');
+            html.style.removeProperty('--color-accent');
+        }
+        
+        if (mode !== 'default') {
+             html.classList.add(mode);
+        }
+        
+        localStorage.setItem('theme', mode);
+        
+        if (mode === 'adaptive') {
+            const currentWallpaper = localStorage.getItem('wallpaper');
+            if(currentWallpaper) window.updateAdaptiveTheme(currentWallpaper);
+        }
+        
+        // Dispatch event for other components
+        window.dispatchEvent(new Event('theme-change'));
+    };
+
+    // --- Wallpaper Manager ---
+    window.setWallpaper = (url) => {
+        console.log('Setting wallpaper to:', url);
+        // Target specific wallpaper divs (there might be multiple or different IDs)
+        const targets = document.querySelectorAll('.wallpaper-target');
+        targets.forEach(el => {
+            el.style.backgroundImage = `url('${url}')`;
+        });
+        localStorage.setItem('wallpaper', url);
+        
+        // Trigger adaptive update if active
+        if (localStorage.getItem('theme') === 'adaptive') {
+            window.updateAdaptiveTheme(url);
+        }
+    };
+
+    // --- Initialization ---
+    // Apply immediate theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        window.setTheme(savedTheme);
+    }
+
+    // Apply immediate wallpaper
+    // Note: DOMContentLoaded is needed because target elements might not exist yet if script runs too early in head
+    document.addEventListener('DOMContentLoaded', () => {
+const savedWallpaper = localStorage.getItem('wallpaper') || 'https://images.unsplash.com/photo-1464618663641-bbdd760ae84a?q=80&w=2070&auto=format&fit=crop';
+        window.setWallpaper(savedWallpaper);
+    });
+
+    // Listen for storage events (Sync between tabs/windows)
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'theme') window.setTheme(e.newValue);
+        if (e.key === 'wallpaper') window.setWallpaper(e.newValue);
+    });
+</script>

@@ -1,0 +1,214 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+import SideBar from '../../components/desktop/SideBar.astro';
+import Launcher from '../../components/desktop/Launcher.astro';
+import ContextMenu from '../../components/desktop/ContextMenu.astro';
+
+export async function getStaticPaths() {
+  const docsEntries = await getCollection('docs');
+  return docsEntries.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Basic Sidebar Logic
+const allDocs = await getCollection('docs');
+const sidebar = {
+  'Core': allDocs.filter(d => d.slug.startsWith('core/')),
+  'Desktop': allDocs.filter(d => d.slug.startsWith('desktop/')),
+  'Terminal': allDocs.filter(d => d.slug.startsWith('terminal/')),
+  'Apps': allDocs.filter(d => d.slug.startsWith('apps/')),
+  'Guide': allDocs.filter(d => d.slug.startsWith('guide/')),
+};
+---
+
+<Layout title={entry.data.title || 'Docs'}>
+    <!-- Background (Matches Desktop) -->
+    <!-- Moved inside container -->
+
+    <!-- UI Overlays -->
+    <SideBar label="Documentation" />
+    <Launcher />
+    <ContextMenu />
+
+    <main class="fixed inset-0 md:top-3 md:right-3 md:bottom-3 md:left-[4.5rem] md:rounded-3xl overflow-hidden shadow-2xl bg-black isolate z-0 transform pb-16 md:pb-0">
+        
+        <!-- Wallpaper Background -->
+        <div class="absolute inset-0 bg-cover bg-center -z-10 bg-background transition-colors duration-500 wallpaper-target">
+            <div class="absolute inset-0 bg-background/60 backdrop-blur-lg"></div> 
+        </div>
+
+        <div class="flex h-full px-4 pt-6 md:pl-8 md:pr-6 md:pt-10 max-w-[1600px] mx-auto gap-8 overflow-y-auto no-scrollbar relative">
+        
+        <!-- Sidebar Navigation -->
+        <!-- Mobile Overlay -->
+        <div id="menu-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-300 opacity-0"></div>
+
+        <aside id="docs-sidebar" class="fixed top-0 left-0 bottom-0 w-72 lg:w-64 lg:top-20 lg:bottom-auto lg:h-[calc(100vh-6rem)] z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 lg:transition-none">
+             <div class="bg-surface backdrop-blur-xl lg:bg-surface/40 lg:backdrop-blur-xl lg:backdrop-saturate-150 border-r lg:border border-white/10 lg:rounded-2xl shadow-2xl h-full overflow-hidden flex flex-col pt-16 lg:pt-0">
+                <div class="overflow-y-auto p-6 space-y-8 h-full custom-scrollbar">
+                    {Object.entries(sidebar).map(([category, items]) => (
+                        items.length > 0 && (
+                        <div>
+                            <h5 class="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest mb-4">
+                                {category}
+                            </h5>
+                            <ul class="space-y-1">
+                            {items.map(doc => (
+                                <li>
+                                <a 
+                                    href={`/docs/${doc.slug}`}
+                                    class:list={[
+                                    "group flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+                                    Astro.url.pathname === `/docs/${doc.slug}` 
+                                        ? "bg-primary/10 text-primary font-medium shadow-sm ring-1 ring-primary/20" 
+                                        : "text-subtext hover:bg-white/5 hover:text-white"
+                                    ]}
+                                >
+                                    <span class="truncate">{doc.slug.split('/').pop().replace(/-/g, ' ').replace(/\.mdx?$/, '')}</span>
+                                    {Astro.url.pathname === `/docs/${doc.slug}` && (
+                                        <div class="ml-auto w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+                                    )}
+                                </a>
+                                </li>
+                            ))}
+                            </ul>
+                        </div>
+                        )
+                    ))}
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-[18rem] xl:mr-[18rem] min-w-0 pb-20 w-full">
+            <!-- Mobile Menu Toggle -->
+            <div class="lg:hidden flex items-center justify-between mb-8">
+                <button id="menu-toggle" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface/50 border border-white/10 text-subtext hover:text-white hover:bg-white/5 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <span class="font-bold text-sm tracking-widest">MENU</span>
+                </button>
+            </div>
+
+            <article class="prose prose-invert prose-lg max-w-none 
+                prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-white
+                prose-h1:text-5xl prose-h1:mb-8 prose-h1:bg-clip-text prose-h1:text-transparent prose-h1:bg-gradient-to-r prose-h1:from-primary prose-h1:to-secondary
+                prose-p:text-subtext prose-p:leading-relaxed
+                prose-a:text-primary prose-a:no-underline prose-a:border-b prose-a:border-primary/30 hover:prose-a:border-primary transition-colors
+                prose-code:before:content-none prose-code:after:content-none
+                prose-pre:!bg-overlay prose-pre:border prose-pre:border-white/10 prose-pre:shadow-2xl prose-pre:rounded-xl prose-pre:!p-6
+                prose-li:text-gray-300
+                bg-surface/30 backdrop-blur-xl backdrop-saturate-150 rounded-3xl border border-white/10 p-8 md:p-12 shadow-2xl animate-fade-in-up">
+                
+                <h1 class="!mb-4 tracking-tight drop-shadow-lg">{entry.data.title}</h1>
+                <div class="flex items-center gap-4 text-xs text-muted mb-10 pb-6 border-b border-white/5 font-mono">
+                    <span class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-primary"></div>
+                        DOCS
+                    </span>
+                    <span>•</span>
+                    <span>{entry.slug}</span>
+                    <span class="ml-auto opacity-50">Updated Recently</span>
+                </div>
+                
+                <Content />
+            </article>
+        </main>
+
+        <!-- Table of Contents -->
+        <aside class="fixed right-6 top-20 w-64 h-[calc(100vh-6rem)] hidden xl:block">
+             <div class="bg-surface/40 backdrop-blur-xl backdrop-saturate-150 border border-white/10 rounded-2xl p-6 shadow-2xl">
+                 <h5 class="text-xs font-bold text-subtext uppercase tracking-widest mb-6">On this page</h5>
+                 <!-- You would ideally generate this dynamically from headings, but currently Astro Content Collection render() doesn't expose headings easily without a plugin or rehype modification. 
+                      For now we assume the user reads vertically, or we add remark-toc later. 
+                      Leaving a placeholder or simple top-level summary if needed. -->
+                 <div class="text-sm text-muted/60 italic">
+                    Reading: {entry.data.title}
+                 </div>
+             </div>
+        </aside>
+
+        </div>
+    </main>
+</Layout>
+
+<style>
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Scoped Inline Code Styling */
+    /* Use :global() if within scoped style, or check if 'prose' class handles it. 
+       Since this is an Astro component style, we need :global for the content slot */
+    :global(.prose :not(pre) > code) {
+        background-color: rgb(var(--color-overlay));
+        color: rgb(var(--color-text));
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.375rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 500;
+        font-family: 'CaskaydiaCove NF', monospace;
+    }
+</style>
+
+<script>
+    // Mobile Menu Logic
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const sidebar = document.getElementById('docs-sidebar');
+    
+    function toggleMenu() {
+        if (!sidebar || !menuOverlay) return;
+        
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+        
+        if (isClosed) {
+            // Open
+            sidebar.classList.remove('-translate-x-full');
+            menuOverlay.classList.remove('hidden');
+            // small delay to allow display:block to apply before opacity transition
+            setTimeout(() => menuOverlay.classList.remove('opacity-0'), 10);
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Close
+            sidebar.classList.add('-translate-x-full');
+            menuOverlay.classList.add('opacity-0');
+            setTimeout(() => {
+                menuOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    }
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+    }
+
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', toggleMenu);
+    }
+    
+    // Close on link click
+    const links = sidebar?.querySelectorAll('a');
+    links?.forEach(link => {
+        link.addEventListener('click', () => {
+             // Only if mobile
+             if (window.innerWidth < 1024) toggleMenu();
+        });
+    });
+</script>
