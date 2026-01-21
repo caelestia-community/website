@@ -1,0 +1,170 @@
+---
+// Launcher.astro
+const mainItems = [
+    { name: 'Calculator', desc: 'Do simple math equations (powered by Qalc)', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>', action: "window.openWindow('calculator-window')" },
+    { name: 'Scheme', desc: 'Change the current colour scheme', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 1 0 10 10 7 7 0 1 0-10-10z"/></svg>', action: "window.toggleThemePanel()" },
+    { name: 'Wallpaper', desc: 'Change the current wallpaper', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>', action: "window.toggleThemePanel()" },
+    { name: 'Variant', desc: 'Change the current scheme variant', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L5 21l-3 1 1-3L19 3a2.1 2.1 0 1 1 3 3z"/></svg>', action: "showSubmenu('variants')" },
+    { name: 'Random', desc: 'Switch to a random wallpaper', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><circle cx="8" cy="10" r="2"/><path d="m10 16-2.086-2.086a2 2 0 0 0-2.828 0L2 17"/></svg>', action: "alert('Random wallpaper set!')" },
+    { name: 'Light', desc: 'Change the scheme to light mode', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M1 12h2"/><path d="M21 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/></svg>', action: "window.setTheme('light')" },
+    { name: 'Dark', desc: 'Change the scheme to dark mode', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>', action: "window.setTheme('default')" },
+    { name: 'Terminal', desc: 'Launch the terminal emulator', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>', action: "openWindow('welcome-window')" },
+];
+
+const variants = [
+    { name: 'Vibrant', desc: 'A high chroma palette. The primary palette\'s chroma is at maximum.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>', action: "window.setTheme('variant-vibrant')" },
+    { name: 'Tonal Spot', desc: 'Default for Material theme colours. A pastel palette with a low chroma.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2"/></svg>', action: "window.setTheme('variant-tonal')" },
+    { name: 'Expressive', desc: 'A medium chroma palette. The primary palette\'s hue is different from the key colour.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 7-5 5-5-5"/><path d="m17 17-5-5-5 5"/></svg>', action: "window.setTheme('variant-expressive')" },
+    { name: 'Fidelity', desc: 'Matches the seed colour, even if the seed colour is very bright.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 9.93 2 12 2s8 9.5 8 11.62V16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1a5 5 0 0 0-5-5 5 5 0 0 0-5 5h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>', action: "window.setTheme('default')" }, // Fidelity = Default handling
+    { name: 'Fruit Salad', desc: 'A playful theme - the seed colour\'s hue does not appear in the theme.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5s2-1 8-1"/><path d="M7 10s2.5-1.5 10-1"/><path d="M9 15s1.5-.5 6-.5"/></svg>', action: "window.setTheme('variant-fruit-salad')" },
+    { name: 'Rainbow', desc: 'A playful theme - the seed colour\'s hue does not appear in the theme.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a10 10 0 0 0-20 0"/></svg>', action: "window.setTheme('variant-rainbow')" },
+    { name: 'Neutral', desc: 'Close to grayscale, a hint of chroma.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20v-20Z"/></svg>', action: "window.setTheme('variant-neutral')" },
+    { name: 'Monochrome', desc: 'All colours are grayscale, no chroma.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="m3 3 18 18"/></svg>', action: "window.setTheme('variant-monochrome')" },
+];
+---
+
+<div id="launcher" class="absolute inset-0 z-[60] hidden opacity-0 transition-opacity duration-300">
+    <!-- Close Layer -->
+    <div class="absolute inset-0 bg-transparent" id="launcher-backdrop"></div>
+    
+    <!-- Command Palette / Menu -->
+    <!-- Command Palette / Menu -->
+    <div class="absolute bottom-20 md:bottom-24 left-4 right-4 md:left-0 md:right-auto md:-ml-px md:w-[450px] bg-background rounded-2xl md:rounded-l-none md:rounded-r-2xl   flex flex-col overflow-hidden max-h-[60vh] md:max-h-[calc(100vh-2rem)] origin-bottom md:origin-bottom-left animate-slide-up md:animate-slide-right">
+
+        <!-- Icons for rendering -->
+        <!-- Views -->
+        <div class="relative w-full overflow-hidden flex" style="min-height: 400px;">
+            
+            <!-- Main View -->
+            <div id="launcher-main" class="w-full flex-shrink-0 transition-transform duration-300 ease-in-out p-1 overflow-y-auto scrollbar-thin">
+                 {mainItems.map((item, index) => (
+                    <button onclick={item.action} class={`w-full flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 group transition-colors text-left ${index === 0 ? 'bg-white/5' : ''}`}>
+                        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center text-primary group-hover:scale-110 transition-transform shadow-inner">
+                            <Fragment set:html={item.icon} />
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-text font-bold text-sm tracking-wide group-hover:text-primary transition-colors">{item.name}</span>
+                            <span class="text-subtext text-xs">{item.desc}</span>
+                        </div>
+                    </button>
+                ))}
+            </div>
+
+            <!-- Variants View -->
+            <div id="launcher-variants" class="w-full flex-shrink-0 transition-transform duration-300 ease-in-out p-1 overflow-y-auto scrollbar-thin translate-x-full absolute inset-0 bg-background/95">
+                <button onclick="showSubmenu('main')" class="w-full flex items-center gap-2 p-3 text-subtext hover:text-white transition-colors border-b border-white/5 mb-2 top-0 pointer-events-auto text-sm font-medium">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                     Back
+                </button>
+
+                {variants.map((item) => (
+                    <button onclick={item.action} class="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 group transition-colors text-left">
+                        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                            <Fragment set:html={item.icon} />
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-text font-bold text-sm tracking-wide">{item.name}</span>
+                            <span class="text-subtext text-xs truncate max-w-[400px]">{item.desc}</span>
+                        </div>
+                    </button>
+                ))}
+            </div>
+
+        </div>
+
+        <!-- Bottom Search Bar -->
+        <div class="p-4 border-t border-white/5 bg-overlay/50 backdrop-blur-md">
+            <div class="flex items-center gap-3 text-subtext px-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" placeholder="Type to search..." class="bg-transparent border-none outline-none text-text w-full placeholder:text-white/20 font-mono text-sm" autofocus />
+            </div>
+        </div>
+        </div>
+
+        <!-- Smoothed Connection (Bottom) -->
+        <div class="absolute -bottom-6 -left-[1px] w-6 h-6 bg-transparent rounded-tl-full shadow-[-4px_-4px_0_rgb(var(--color-background))] z-20"></div>
+    </div>
+</div>
+
+<style>
+    @keyframes slideRight {
+        0% { opacity: 0; transform: translateX(-20px) scale(0.95); }
+        100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes slideUp {
+        0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-slide-right {
+        animation: slideRight 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    .animate-slide-up {
+        animation: slideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+</style>
+
+<script is:inline>
+    const launcher = document.getElementById('launcher');
+    const backdrop = document.getElementById('launcher-backdrop');
+    const mainView = document.getElementById('launcher-main');
+    const variantsView = document.getElementById('launcher-variants');
+
+    // Submenu Logic
+    window.showSubmenu = (menu) => {
+        if (menu === 'variants') {
+            mainView.style.transform = 'translateX(-100%)';
+            variantsView.style.transform = 'translateX(0)';
+        } else {
+            mainView.style.transform = 'translateX(0)';
+            variantsView.style.transform = 'translateX(100%)';
+        }
+    };
+
+    window.toggleLauncher = () => {
+        if (launcher.classList.contains('hidden')) {
+            window.openLauncher();
+        } else {
+            window.closeLauncher();
+        }
+    };
+
+    window.openLauncher = () => {
+        // Reset to main view on open
+        window.showSubmenu('main');
+        
+        launcher.classList.remove('hidden');
+        void launcher.offsetWidth;
+        launcher.classList.remove('opacity-0');
+        
+        const input = launcher.querySelector('input');
+        if(input) setTimeout(() => input.focus(), 50);
+    };
+
+    window.closeLauncher = () => {
+        launcher.classList.add('opacity-0');
+        setTimeout(() => {
+            launcher.classList.add('hidden');
+        }, 300);
+    };
+
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            window.closeLauncher();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Meta' || (e.ctrlKey && e.code === 'Space')) {
+            e.preventDefault();
+            window.toggleLauncher();
+        }
+        if (e.key === 'Escape') {
+            // If in variant view, go back
+            if (!launcher.classList.contains('hidden') && variantsView.style.transform === 'translateX(0px)') {
+                 window.showSubmenu('main');
+            } else if (!launcher.classList.contains('hidden')) {
+                window.closeLauncher();
+            }
+        }
+    });
+</script>

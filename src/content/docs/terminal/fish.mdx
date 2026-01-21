@@ -1,0 +1,93 @@
+# Fish Shell
+
+The terminal is more than just a command prompt; in Caelestia, it's a productivity powerhouse.
+
+We choose **Fish (Friendly Interactive SHell)** because out of the box, it offers features that other shells require complex plugins to achieve. It is colorful, smart, and user-friendly by default.
+
+## The Caelestia Terminal Experience
+
+Your terminal environment is capable of much more than standard Bash.
+
+### 1. Intelligent Autosuggestions
+
+As you type, Fish suggests commands based on history and completions.
+
+- **Right Arrow (`→`)**: Accept the suggestion.
+- **Alt + Right Arrow**: Accept one word of the suggestion.
+
+### 2. Syntax Highlighting
+
+Commands are highlighted as you type. Red means the command is invalid or not found; blue/green means it's valid. This gives you instant feedback before you even press Enter.
+
+### 3. Starship Prompt
+
+We use [Starship](https://starship.rs) to provide a cross-shell, customizable, and extremely fast prompt. It shows you:
+
+- **Directory**: Current path.
+- **Git Status**: Branch, changes, stashed files.
+- **Package Versions**: Python, Node, Rust versions when relevant files are detected.
+- **Execution Time**: How long the last command took (if it was slow).
+
+### 4. Fastfetch
+
+Every time you open a new terminal window, you are greeted by `fastfetch`, giving you a quick snapshot of your system status, kernel version, and uptime, styled with Caelestia branding.
+
+## Key Abbreviations
+
+Caelestia comes with a suite of abbreviations to make common tasks faster. These expand into full commands when you press Space or Enter.
+
+| Abbreviation | Expands To                                                    | Description                       |
+| :----------- | :------------------------------------------------------------ | :-------------------------------- |
+| `l`          | `eza -lh --icons=auto`                                        | List files with icons & details   |
+| `la`         | `eza -lha --icons=auto --sort=name --group-directories-first` | List all files (including hidden) |
+| `lt`         | `eza --tree --level=2 --icons=auto`                           | Show file tree                    |
+| `ga`         | `git add .`                                                   | Stage all changes                 |
+| `gc`         | `git commit -m`                                               | Commit with message               |
+| `gp`         | `git push`                                                    | Push to remote                    |
+| `gpl`        | `git pull`                                                    | Pull from remote                  |
+| `up`         | `yay`                                                         | Update system                     |
+
+## Configuration
+
+### Fish Config
+
+File: `~/.config/fish/config.fish`
+
+This works just like `.bashrc`. You can look at the [official Fish documentation](https://fishshell.com/docs/current/index.html) to learn the syntax.
+
+To add your own alias:
+
+```fish
+alias helloworld "echo Hello, World!"
+```
+
+To add to the `$PATH` persistently:
+
+```fish
+fish_add_path /path/to/my/bin
+```
+
+### Starship Config
+
+File: `~/.config/starship.toml`
+
+Everything in the prompt is configurable. If you want to disable the NodeJS module, for example:
+
+```toml
+[nodejs]
+disabled = true
+```
+
+### Fastfetch Config
+
+File: `~/.config/fastfetch/config.jsonc`
+
+You can customize the logo, the information displayed, or colors here.
+
+## Switching to Bash/Zsh?
+
+While Caelestia defaults to Fish, if you must use POSIX-compliant shells (like for specific scripting work):
+
+1.  **Don't uninstall Fish**: Caelestia scripts might rely on it.
+2.  **Change Default Shell**: `chsh -s /bin/bash`.
+3.  **Porting**: You will lose the abbreviations and syntax highlighting unless you manually configure Zsh with plugins like `zsh-autosuggestions` and `zsh-syntax-highlighting`.

@@ -1,0 +1,191 @@
+---
+// Window.astro
+interface Props {
+  title: string;
+  class?: string;
+  w?: string;
+  h?: string;
+  transparent?: boolean;
+}
+
+const { title, id, class: className, w = "w-[900px]", h = "h-[550px]", initialVisible = false, transparent = false } = Astro.props;
+---
+
+<!-- Window Container -->
+<div id={id} data-transparent={transparent} class={`fixed inset-0 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-10 group/window ${w} ${h} max-w-none max-h-none md:max-w-[95vw] md:max-h-[90vh] ${className} ${initialVisible ? 'animate-pop-in' : 'hidden opacity-0 scale-95 pointer-events-none'}`}>
+    
+    <!-- Outer Glow -->
+    <div class="absolute -inset-[1px] bg-gradient-to-br from-primary via-accent to-blue-500 rounded-xl opacity-100 blur-[2px] transition-all duration-500"></div>
+
+    <!-- Main Content -->
+    <div class={`window-content relative w-full h-full ${transparent ? '' : 'bg-surface/95'} backdrop-blur-2xl md:rounded-xl flex flex-col overflow-hidden shadow-2xl border-x-0 border-y-0 md:border md:border-white/5`}>
+        
+        <!-- Titlebar -->
+        <div class={`window-handle h-10 border-b border-white/5 flex items-center justify-between px-4 shrink-0 ${transparent ? 'bg-black/20 backdrop-blur-md' : 'bg-surface'} cursor-grab active:cursor-grabbing select-none transition-colors`}>
+            <div class="flex items-center gap-3 pointer-events-none">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                 <span class="text-xs font-bold tracking-widest text-muted uppercase">{title}</span>
+            </div>
+            
+            <div class="flex gap-2">
+                <!-- Close Button Only -->
+                <button class="hover:bg-red-500/20 p-1.5 rounded-lg transition-colors group" onclick={`closeWindow('${id}')`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-subtext group-hover:text-red-400 transition-colors"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Inner Content -->
+        <div class="flex-1 overflow-auto p-0 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <slot />
+        </div>
+    </div>
+</div>
+
+<style>
+  /* Animations */
+  @keyframes popIn {
+    0% { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes popInMobile {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes popOut {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
+  }
+  @keyframes popOutMobile {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.95); }
+  }
+  
+  .animate-pop-in {
+    animation: popInMobile 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @media (min-width: 768px) {
+    .animate-pop-in {
+      animation: popIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+  }
+
+  .animate-pop-out {
+    animation: popOutMobile 0.3s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+  }
+  @media (min-width: 768px) {
+    .animate-pop-out {
+      animation: popOut 0.3s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+    }
+  }
+  .dragging {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Active Window State (Targeted by JS) */
+  /* Only apply opaque background if NOT transparent */
+  .group\/window:not([data-transparent="true"]).window-active .window-content {
+    background-color: rgba(var(--color-surface), 0.98);
+    border-color: rgba(var(--color-primary), 0.3);
+    box-shadow: 0 0 0 1px rgba(var(--color-primary), 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+
+  /* For transparent active windows, maybe just the border/shadow glow? */
+  .group\/window[data-transparent="true"].window-active .window-content {
+    border-color: rgba(var(--color-primary), 0.3);
+    box-shadow: 0 0 0 1px rgba(var(--color-primary), 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const windows = document.querySelectorAll('.group\\/window');
+    let maxZ = 100; // Track highest Z locally
+
+    function setActive(win) {
+        // Reset others
+        windows.forEach(w => w.classList.remove('window-active'));
+        
+        // Set active
+        win.classList.add('window-active');
+        win.style.zIndex = ++maxZ;
+    }
+
+    windows.forEach(win => {
+        // Set active on click
+        win.addEventListener('mousedown', () => setActive(win));
+    
+      const titlebar = win.querySelector('.window-handle');
+      if (!titlebar) return;
+
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      titlebar.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        
+        // Remove centering transforms
+        const rect = win.getBoundingClientRect();
+        
+        // Handling Relative Positioning (For Shell Frame)
+        const parentRect = win.offsetParent ? win.offsetParent.getBoundingClientRect() : { left: 0, top: 0 };
+        const parentW = win.offsetParent ? win.offsetParent.clientWidth : window.innerWidth;
+        const parentH = win.offsetParent ? win.offsetParent.clientHeight : window.innerHeight;
+
+        let relativeTop = rect.top - parentRect.top;
+        let relativeLeft = rect.left - parentRect.left;
+
+        win.classList.remove('-translate-x-1/2', '-translate-y-1/2', 'animate-pop-in');
+        win.classList.add('dragging');
+        
+        // Safety bounds
+        if (relativeTop < 0) relativeTop = 10;
+        if (relativeTop > parentH - 40) relativeTop = parentH - 100;
+
+        win.style.left = `${relativeLeft}px`;
+        win.style.top = `${relativeTop}px`;
+        win.style.transform = 'none';
+
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = relativeLeft;
+        initialTop = relativeTop;
+        
+        titlebar.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const parentW = win.offsetParent ? win.offsetParent.clientWidth : window.innerWidth;
+        const parentH = win.offsetParent ? win.offsetParent.clientHeight : window.innerHeight;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        const newTop = initialTop + dy;
+        const newLeft = initialLeft + dx;
+
+        // Constraint: Keep titlebar visible (top >= 0)
+        // Also prevent dragging too far down (bottom handle visible)
+        if (newTop >= 0 && newTop < parentH - 30) {
+             win.style.top = `${newTop}px`;
+        }
+        
+        // Horizontal constraint can be looser
+        if (newLeft > -win.offsetWidth + 50 && newLeft < parentW - 50) {
+             win.style.left = `${newLeft}px`;
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        titlebar.style.cursor = 'grab';
+        win.classList.remove('dragging');
+      });
+    });
+  });
+</script>

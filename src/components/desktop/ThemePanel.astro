@@ -1,0 +1,179 @@
+---
+const importedSchemes = [
+  { id: "scheme-catppuccin-frappe-dark", name: "Catppuccin Frappe", color: "#b7c4ff" },
+  { id: "scheme-catppuccin-latte-light", name: "Catppuccin Latte", color: "#3e7b9f" },
+  { id: "scheme-catppuccin-macchiato-dark", name: "Catppuccin Macchiato", color: "#bac3ff" },
+  { id: "scheme-catppuccin-mocha-dark", name: "Catppuccin Mocha", color: "#c2c1ff" },
+  { id: "scheme-darkgreen-hard-dark", name: "Darkgreen Hard", color: "#24BD5C" },
+  { id: "scheme-gruvbox-hard-dark", name: "Gruvbox Hard", color: "#85d2e7" },
+  { id: "scheme-gruvbox-medium-dark", name: "Gruvbox Medium", color: "#81d3e0" },
+  { id: "scheme-gruvbox-soft-dark", name: "Gruvbox Soft", color: "#ffb878" },
+  { id: "scheme-oldworld-default-dark", name: "Oldworld", color: "#aac7ff" },
+  { id: "scheme-onedark-default-dark", name: "Onedark", color: "#a8c8ff" },
+  { id: "scheme-rosepine-main-dark", name: "Rose Pine", color: "#c9bfff" },
+  { id: "scheme-rosepine-moon-dark", name: "Rose Pine Moon", color: "#c6bfff" },
+  { id: "scheme-rosepine-dawn-light", name: "Rose Pine Dawn", color: "#897324" },
+  { id: "scheme-shadotheme-default-dark", name: "Shadotheme", color: "#bfc1ff" },
+  { id: "scheme-dracula-dark", name: "Dracula", color: "#bd93f9" },
+  { id: "scheme-nord-dark", name: "Nord", color: "#88c0d0" },
+  { id: "scheme-tokyo-night-dark", name: "Tokyo Night", color: "#7aa2f7" },
+  { id: "scheme-cyberpunk-dark", name: "Cyberpunk", color: "#ff0099" },
+  { id: "scheme-synthwave84-dark", name: "Synthwave '84", color: "#ff71ce" }
+];
+---
+
+<div id="theme-panel" class="absolute inset-0 hidden opacity-0 transition-opacity duration-300 z-[60]">
+    <!-- Close Layer -->
+    <div class="absolute inset-0 bg-transparent" id="theme-panel-backdrop"></div>
+    
+    <!-- Panel -->
+    <div class="absolute bottom-20 md:bottom-24 left-4 right-4 md:left-0 md:right-auto md:-ml-px md:w-[400px] bg-background rounded-2xl md:rounded-l-none md:rounded-r-2xl  flex flex-col overflow-hidden max-h-[60vh] md:max-h-[calc(100vh-2rem)] origin-bottom md:origin-bottom-left animate-slide-up md:animate-slide-right">
+
+        <div class="p-4 border-b border-white/5 flex justify-between items-center bg-white/5">
+            <h3 class="font-bold text-text">Theme & Appearance</h3>
+        </div>
+
+        <div class="p-4 overflow-y-auto scrollbar-thin space-y-6">
+            
+            <!-- Wallpaper -->
+             <div class="space-y-3">
+                <label class="text-xs text-subtext font-bold uppercase tracking-wider">Wallpaper</label>
+                <div id="wallpaper-list" class="flex gap-3 overflow-x-auto pb-2 snap-x scrollbar-thin">
+                    <button data-wallpaper="/wallpapers/wallpaper-1.jpg" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-1.jpg')"></button>
+                    <button data-wallpaper="/wallpapers/wallpaper-2.jpg" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-2.jpg')"></button>
+                    <button data-wallpaper="/wallpapers/wallpaper-3.png" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-3.png')"></button>
+                    <button data-wallpaper="/wallpapers/wallpaper-4.png" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-4.png')"></button>
+                </div>
+
+
+            </div>
+
+            <!-- Themes -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                    <label class="text-xs text-subtext font-bold uppercase tracking-wider">Color Scheme</label>
+                    <span id="theme-label" class="text-[10px] text-primary font-mono opacity-0 transition-opacity duration-300">Select a theme</span>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-3">
+                    <!-- Special: Adaptive -->
+                    <button onclick="setTheme('adaptive')" onmouseenter="updateThemeLabel('Adaptive')" onmouseleave="resetThemeLabel()" class="aspect-square rounded-full border border-white/10 relative overflow-hidden group hover:scale-110 transition-all shadow-lg ring-2 ring-transparent hover:ring-primary/50">
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-500 via-green-500 to-blue-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow-lg"><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                        </div>
+                    </button>
+
+                    <!-- Special: Official -->
+                    <button onclick="setTheme('official')" onmouseenter="updateThemeLabel('Official')" onmouseleave="resetThemeLabel()" class="aspect-square rounded-full border border-white/10 relative overflow-hidden group hover:scale-110 transition-all shadow-lg ring-2 ring-transparent hover:ring-primary/50">
+                         <div class="absolute inset-0 bg-[#ffb0ca]"></div>
+                    </button>
+
+                    <!-- Special: System -->
+                    <button onclick="setTheme('default')" onmouseenter="updateThemeLabel('System')" onmouseleave="resetThemeLabel()" class="aspect-square rounded-full border border-white/10 relative overflow-hidden group hover:scale-110 transition-all shadow-lg ring-2 ring-transparent hover:ring-primary/50">
+                         <div class="absolute inset-0 bg-[#89b4fa]"></div>
+                    </button>
+
+                    {importedSchemes.map(scheme => (
+                        <button onclick={`setTheme('${scheme.id}')`} onmouseenter={`updateThemeLabel('${scheme.name}')`} onmouseleave="resetThemeLabel()" class="aspect-square rounded-full border border-white/10 relative overflow-hidden group hover:scale-110 transition-transform shadow-lg ring-2 ring-transparent hover:ring-primary/50">
+                            <div class="absolute inset-0" style={`background-color: ${scheme.color}`}></div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Smoothed Connection (Bottom) -->
+        <div class="absolute -bottom-6 -left-[1px] w-6 h-6 bg-transparent rounded-tl-full shadow-[-4px_-4px_0_rgb(var(--color-background))] z-20"></div>
+    </div>
+</div>
+
+<style>
+    @keyframes slideRight {
+        0% { opacity: 0; transform: translateX(-20px) scale(0.95); }
+        100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes slideUp {
+        0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-slide-right {
+        animation: slideRight 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    .animate-slide-up {
+        animation: slideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+</style>
+
+<script is:inline>
+    const themePanel = document.getElementById('theme-panel');
+    const themeBackdrop = document.getElementById('theme-panel-backdrop');
+    const themeLabel = document.getElementById('theme-label');
+
+    window.updateThemeLabel = (name) => {
+        if(themeLabel) {
+            themeLabel.innerText = name;
+            themeLabel.classList.remove('opacity-0');
+        }
+    };
+
+    window.resetThemeLabel = () => {
+         if(themeLabel) {
+            themeLabel.classList.add('opacity-0');
+        }
+    };
+
+    window.toggleThemePanel = () => {
+        if (themePanel.classList.contains('hidden')) {
+            window.openThemePanel();
+        } else {
+            window.closeThemePanel();
+        }
+    };
+
+    window.openThemePanel = () => {
+        // Close other panels
+        if(window.closeLauncher && typeof window.closeLauncher === 'function') window.closeLauncher();
+
+        themePanel.classList.remove('hidden');
+        void themePanel.offsetWidth;
+        themePanel.classList.remove('opacity-0');
+    };
+
+    window.closeThemePanel = () => {
+        themePanel.classList.add('opacity-0');
+        setTimeout(() => {
+            themePanel.classList.add('hidden');
+        }, 300);
+    };
+
+    if (themeBackdrop) {
+        themeBackdrop.addEventListener('click', () => {
+            window.closeThemePanel();
+        });
+    }
+
+    // Listen for ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !themePanel.classList.contains('hidden')) {
+            window.closeThemePanel();
+        }
+    });
+
+    // --- Wallpaper Button Logic (Event Delegation) ---
+    const wallpaperGrid = document.getElementById('wallpaper-list');
+    if (wallpaperGrid) {
+        wallpaperGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-wallpaper]');
+            if (btn) {
+                const url = btn.getAttribute('data-wallpaper');
+                if (url && window.setWallpaper) {
+                    window.setWallpaper(url);
+                }
+            }
+        });
+    }
+
+
+</script>

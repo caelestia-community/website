@@ -1,0 +1,158 @@
+# Caelestia Shell
+
+[Repository Link](https://github.com/caelestia-dots/shell)
+
+The Caelestia Shell is the visual heart of your desktop experience. It is a highly performant, fully customizable shell environment built on **Quickshell** (Qt/QML).
+
+It serves as the first touchpoint for your system—drawing you in with its aesthetics while providing powerful tools to manage your workflow.
+
+## Philosophy & Ideals
+
+The shell is designed around three core pillars:
+
+1.  **Performance First**: Written in C++ and Qt, the shell is designed to be lightweight and buttery smooth, even with complex animations and high refresh rate displays.
+2.  **Unified Aesthetics**: It doesn't just sit on top of your system; it _is_ the system. Every component—from the bar to the notifications—shares a consistent design language.
+3.  **User Sovereignty**: We believe you should have complete control. Whether it's through simple configuration files or diving into the QML code, the shell adapts to you, not the other way around.
+
+## Installation
+
+### Arch Linux (AUR)
+
+```bash
+yay -S caelestia-shell
+```
+
+### Manual Installation
+
+1.  **Install Dependencies**:
+
+    - **Core**: `caelestia-cli`, `quickshell-git`, `fish`
+    - **System**: `ddcutil`, `brightnessctl`, `networkmanager`, `lm-sensors`, `libpipewire`
+    - **Libraries**: `qt6-declarative`, `gcc-libs`, `aubio`, `libcava`
+
+2.  **Build & Install**:
+    ```bash
+    git clone https://github.com/caelestia-dots/shell.git
+    cd shell
+    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
+    cmake --build build
+    sudo cmake --install build
+    ```
+
+## Usage
+
+### Starting the Shell
+
+If you are using the full Caelestia setup, the shell starts automatically. To run it manually:
+
+```bash
+caelestia shell -d
+```
+
+### Interactions (IPC)
+
+The shell is fully scriptable. You can control almost every aspect of it using the `caelestia shell` command.
+
+| Target        | Function    | Example                                      | Description               |
+| :------------ | :---------- | :------------------------------------------- | :------------------------ |
+| **mpris**     | `playPause` | `caelestia shell mpris playPause`            | Toggle media playback     |
+| **notifs**    | `clear`     | `caelestia shell notifs clear`               | Dismiss all notifications |
+| **wallpaper** | `set`       | `caelestia shell wallpaper set /path/to/img` | Set the wallpaper         |
+| **lock**      | `lock`      | `caelestia shell lock lock`                  | Lock the screen           |
+
+Run `caelestia shell -s` to see the full list of available commands.
+
+## Configuration
+
+Configuration is handled in `~/.config/caelestia/shell.json`. This file might not exist by default, so you'll need to create it.
+
+The configuration is hierarchical and allows you to override defaults for every component.
+
+### Essential Options
+
+#### 1. Wallpapers & Assets
+
+Tell the shell where to look for your images.
+
+```json
+"paths": {
+    "wallpaperDir": "~/Pictures/Wallpapers",
+    "mediaGif": "root:/assets/bongocat.gif"
+}
+```
+
+#### 2. Bar Modules
+
+Customize the layout of your top bar. You can reorder entries or disable the ones you don't need.
+
+```json
+"bar": {
+    "entries": [
+        { "id": "workspaces", "enabled": true },
+        { "id": "spacer", "enabled": true },
+        { "id": "clock", "enabled": true },
+        { "id": "statusIcons", "enabled": true }
+    ],
+    "status": {
+        "showBattery": true,
+        "showNetwork": false
+    }
+}
+```
+
+#### 3. Appearance & Animations
+
+Adjust the look and feel. The shell uses a scaling system for consistent sizing.
+
+```json
+"appearance": {
+    "anim": {
+        "durations": { "scale": 0.5 } // Make animations 2x faster
+    },
+    "font": {
+        "family": { "sans": "Inter" },
+        "size": { "scale": 1.1 }
+    },
+    "transparency": {
+        "enabled": true,
+        "base": 0.85
+    }
+}
+```
+
+#### 4. Default Applications
+
+Set which apps open for specific actions.
+
+```json
+"general": {
+    "apps": {
+        "terminal": ["foot"],
+        "explorer": ["thunar"],
+        "audio": ["pavucontrol"]
+    }
+}
+```
+
+> [!TIP] > **View the Full Reference**
+> For a complete list of all configuration options, see the [Configuration Guide](/guide/configuration).
+
+## Extending the Shell
+
+Caelestia Shell is built to be hacked. If `shell.json` isn't enough, you can modify the source code directly.
+
+### The Quickshell Structure
+
+The shell logic is written in QML and lives in your config directory (if installed manually) or the system install path.
+
+To start customizing:
+
+1.  Navigate to `$XDG_CONFIG_HOME/quickshell/caelestia` (or clone the repo there).
+2.  QML files define the UI. You can add new widgets, change layouts, or write entirely new logic.
+3.  Changes usually require restarting the shell: `pkill caelestia-shell && caelestia shell -d`.
+
+### Troubleshooting
+
+- **Screen Flickering?** Disable VRR in your Hyprland config (`misc { vrr = 0 }`).
+- **Missing Icons?** Ensure you have the required fonts (Material Symbols, etc.) installed.
+- **Wallpapers not showing?** detailed logs can be viewed by running the shell in a terminal window.

@@ -1,0 +1,275 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Window from '../components/desktop/Window.astro';
+
+import Launcher from '../components/desktop/Launcher.astro';
+import ThemePanel from '../components/desktop/ThemePanel.astro';
+import SideBar from '../components/desktop/SideBar.astro';
+import BootSplash from '../components/desktop/BootSplash.astro';
+import ContextMenu from '../components/desktop/ContextMenu.astro';
+
+const icons = {
+    docs: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`,
+    github: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>`,
+    gallery: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>`,
+    terminal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>`
+};
+const importedSchemes = [
+  { id: "scheme-catppuccin-frappe-dark", name: "Catppuccin Frappe", color: "#b7c4ff" },
+  { id: "scheme-catppuccin-latte-light", name: "Catppuccin Latte", color: "#3e7b9f" },
+  { id: "scheme-catppuccin-macchiato-dark", name: "Catppuccin Macchiato", color: "#bac3ff" },
+  { id: "scheme-catppuccin-mocha-dark", name: "Catppuccin Mocha", color: "#c2c1ff" },
+  { id: "scheme-darkgreen-hard-dark", name: "Darkgreen Hard", color: "#24BD5C" },
+  { id: "scheme-gruvbox-hard-dark", name: "Gruvbox Hard", color: "#85d2e7" },
+  { id: "scheme-gruvbox-medium-dark", name: "Gruvbox Medium", color: "#81d3e0" },
+  { id: "scheme-gruvbox-soft-dark", name: "Gruvbox Soft", color: "#ffb878" },
+  { id: "scheme-oldworld-default-dark", name: "Oldworld", color: "#aac7ff" },
+  { id: "scheme-onedark-default-dark", name: "Onedark", color: "#a8c8ff" },
+  { id: "scheme-rosepine-main-dark", name: "Rose Pine", color: "#c9bfff" },
+  { id: "scheme-rosepine-moon-dark", name: "Rose Pine Moon", color: "#c6bfff" },
+  { id: "scheme-rosepine-dawn-light", name: "Rose Pine Dawn", color: "#897324" },
+  { id: "scheme-shadotheme-default-dark", name: "Shadotheme", color: "#bfc1ff" }
+];
+---
+
+<Layout title="Caelestia Dots | The Ultimate Linux Rice">
+    <!-- ... (Background logic in ThemeManager) ... -->
+    <!-- System UI (Global Overlays) -->
+    <BootSplash />
+    <SideBar />
+    <!-- Desktop Viewport (Constrained Content) -->
+    <!-- Sidebar is 4rem (w-16). We want ~0.75rem gap (p-3 equivalent). Left = 4rem + 0.75rem = 4.75rem -->
+    <main class="fixed inset-0 md:top-3 md:right-3 md:bottom-3 md:left-[4.5rem] md:rounded-3xl overflow-hidden shadow-2xl bg-background isolate z-0 group/desktop pb-16 md:pb-0">
+        
+    
+        <!-- Wallpaper (Moved inside Viewport) -->
+        <div id="wallpaper" class="absolute inset-0 bg-cover bg-center -z-10 bg-background transition-colors duration-500 wallpaper-target">
+            <!-- Vignette & Tint -->
+            <div class="absolute inset-0" style="background: radial-gradient(circle at center, transparent 0%, rgb(var(--color-background) / 0.3) 100%);"></div>
+            <div class="absolute inset-0 bg-background/10 backdrop-blur-[1px]"></div>
+        </div>
+        
+        <ThemePanel />
+        <Launcher />
+        <ContextMenu />
+        
+
+        <!-- Desktop Content -->
+        <div class="relative w-full h-full">
+
+    <!-- Main Window -->
+    <Window title="Welcome to Caelestia" id="welcome-window" initialVisible={true} w="w-full md:w-[900px]" h="h-full md:h-[550px]">
+        <div class="relative w-full h-full flex flex-col items-center justify-center p-10 bg-gradient-to-b from-surface to-background">
+            
+            <!-- Hero Content -->
+            <div class="text-center space-y-6 mb-12">
+                <h1 class="text-7xl font-bold tracking-tight">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent drop-shadow-xl filter animate-gradient-x">Caelestia</span>
+                </h1>
+                <p class="text-subtext text-lg font-normal tracking-wide max-w-lg mx-auto">
+                    The ultimate desktop environment for Linux.
+                    <br/>
+                    <span class="text-sm text-muted mt-2 block">Powered by Hyprland & Quickshell.</span>
+                </p>
+            </div>
+            
+            <div class="flex gap-5 mb-10">
+                <a href="/docs/core/shell" class="px-8 py-3 bg-primary rounded-lg font-bold text-white hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/30 transform hover:-translate-y-0.5">
+                    Get Started
+                </a>
+                <a href="/docs/guide/installation" class="px-8 py-3 bg-overlay border border-white/5 rounded-lg font-bold text-subtext hover:bg-surface transition-all hover:border-white/10 transform hover:-translate-y-0.5">
+                    Installation
+                </a>
+            </div>
+
+            <!-- Terminal Mockup (Always Dark) -->
+            <div class="w-full max-w-[420px] bg-[#0c0c12] rounded-lg border border-white/5 p-5 font-mono text-xs shadow-2xl relative overflow-hidden group text-left">
+                <!-- Fetch Output -->
+                <div id="term-info" class="grid grid-cols-[auto,1fr] gap-x-4 gap-y-1.5 z-10 relative">
+                    <p class="col-span-2 text-gray-500 mb-2">$ <span class="text-gray-200">caelestia fetch</span></p>
+                    
+                    <span class="text-primary font-bold">OS:</span>      <span class="text-gray-300">Arch Linux</span>
+                    <span class="text-primary font-bold">Shell:</span>   <span class="text-gray-300">Fish + Starship</span>
+                    <span class="text-primary font-bold">DE:</span>      <span class="text-gray-300">Hyprland</span>
+                    <span class="text-primary font-bold">Theme:</span>   <span class="text-gray-300">Caelestia Dark</span>
+                    <span class="text-primary font-bold">Uptime:</span>  <span class="text-gray-300">Fast as f***</span>
+                    
+                    <div class="col-span-2 flex gap-2 mt-2">
+                        <div class="w-2.5 h-2.5 rounded-full bg-black border border-white/10"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-purple-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-cyan-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Window>
+
+    <!-- Calculator Window -->
+    <Window title="Calculator" id="calculator-window" w="w-full md:w-[320px]" h="h-full md:h-[480px]">
+        <div class="h-full flex flex-col p-4 gap-4">
+            <!-- Display -->
+            <input type="text" id="calc-display" readonly class="w-full h-20 bg-background/50 rounded-xl text-right text-3xl font-mono p-4 text-text/90 focus:outline-none" value="0" />
+            
+            <!-- Keypad -->
+            <div class="grid grid-cols-4 gap-2 flex-1">
+                <button onclick="calcClear()" class="col-span-1 rounded-lg bg-surface hover:bg-white/10 text-error font-bold transition-colors">C</button>
+                <button onclick="calcAppend('(')" class="rounded-lg bg-surface hover:bg-white/10 text-primary transition-colors">(</button>
+                <button onclick="calcAppend(')')" class="rounded-lg bg-surface hover:bg-white/10 text-primary transition-colors">)</button>
+                <button onclick="calcAppend('/')" class="rounded-lg bg-surface hover:bg-white/10 text-primary transition-colors">÷</button>
+                
+                <button onclick="calcAppend('7')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">7</button>
+                <button onclick="calcAppend('8')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">8</button>
+                <button onclick="calcAppend('9')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">9</button>
+                <button onclick="calcAppend('*')" class="rounded-lg bg-surface hover:bg-white/10 text-primary transition-colors">×</button>
+                
+                <button onclick="calcAppend('4')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">4</button>
+                <button onclick="calcAppend('5')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">5</button>
+                <button onclick="calcAppend('6')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">6</button>
+                <button onclick="calcAppend('-')" class="rounded-lg bg-surface hover:bg-white/10 text-primary transition-colors">-</button>
+                
+                <button onclick="calcAppend('1')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">1</button>
+                <button onclick="calcAppend('2')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">2</button>
+                <button onclick="calcAppend('3')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">3</button>
+                <button onclick="calcAppend('+')" class="rounded-lg bg-surface hover:bg-white/10 text-primary transition-colors">+</button>
+                
+                <button onclick="calcAppend('0')" class="col-span-2 rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">0</button>
+                <button onclick="calcAppend('.')" class="rounded-lg bg-surface hover:bg-white/10 text-text transition-colors">.</button>
+                <button onclick="calcEval()" class="rounded-lg bg-primary text-white font-bold hover:brightness-110 transition-all">=</button>
+            </div>
+        </div>
+    </Window>
+
+
+        </div>
+    </main>
+</Layout>
+
+<script is:inline>
+    // Typing Animation
+    const termLines = [
+        { sel: '#term-line-1', delay: 500 },
+        { sel: '#term-info', delay: 1000 } // The grid
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const infoGrid = document.getElementById('term-info');
+        if(infoGrid) infoGrid.style.opacity = '0';
+        
+        setTimeout(() => {
+            if(infoGrid) {
+                infoGrid.style.transition = 'opacity 0.5s ease';
+                infoGrid.style.opacity = '1';
+            }
+        }, 800);
+    });
+
+    // --- Window Manager ---
+    let zIndexCounter = 100;
+    
+    window.openWindow = (id) => {
+        const win = document.getElementById(id);
+        if (!win) return;
+        
+        // If hidden, show it
+        if (win.classList.contains('hidden')) {
+            win.classList.remove('hidden', 'opacity-0', 'scale-95', 'pointer-events-none');
+            win.classList.add('animate-pop-in');
+        }
+        
+        // Bring to front
+        zIndexCounter++;
+        win.style.zIndex = zIndexCounter.toString();
+        
+        // Close launcher if open
+        if(window.closeLauncher) window.closeLauncher();
+    };
+
+    window.closeWindow = (id) => {
+        const win = document.getElementById(id);
+        if (!win) return;
+        
+        win.classList.remove('animate-pop-in');
+        win.classList.add('animate-pop-out', 'pointer-events-none');
+        
+        setTimeout(() => {
+            win.classList.add('hidden', 'opacity-0', 'scale-95');
+            win.classList.remove('animate-pop-out');
+        }, 300); // Match animation duration
+    };
+
+    // Bring to front on click
+    document.addEventListener('mousedown', (e) => {
+        const win = e.target.closest('.group\\/window');
+        if (win) {
+            zIndexCounter++;
+            win.style.zIndex = zIndexCounter.toString();
+        }
+    });
+
+    // --- Theme & Wallpaper Manager ---
+    // (Handled globally by ThemeManager.astro)
+    // We can still listen for changes if needed for local specific updates
+
+    // --- Context Menu ---
+    const contextMenu = document.getElementById('context-menu');
+    
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        
+        // Show menu
+        contextMenu.classList.remove('hidden');
+        
+        // Position relative to the main desktop container
+        const mainEl = document.querySelector('main');
+        const rect = mainEl.getBoundingClientRect();
+        
+        // Ensure availability in viewport
+        let x = e.clientX;
+        let y = e.clientY;
+        
+        if (x + 200 > window.innerWidth) x = window.innerWidth - 210;
+        if (y + 200 > window.innerHeight) y = window.innerHeight - 210;
+        
+        // Adjust for container offset
+        contextMenu.style.left = `${x - rect.left}px`;
+        contextMenu.style.top = `${y - rect.top}px`;
+    });
+
+    // Close on click anywhere
+    document.addEventListener('click', () => {
+        if (contextMenu && !contextMenu.classList.contains('hidden')) {
+            contextMenu.classList.add('hidden');
+        }
+    });
+    // --- Calculator Logic ---
+    let calcVal = '0';
+    const updateDisplay = () => {
+        const display = document.getElementById('calc-display');
+        if(display) display.value = calcVal;
+    };
+    
+    window.calcAppend = (char) => {
+        if (calcVal === '0' && char !== '.') calcVal = char;
+        else calcVal += char;
+        updateDisplay();
+    };
+    
+    window.calcClear = () => {
+        calcVal = '0';
+        updateDisplay();
+    };
+    
+    window.calcEval = () => {
+        try {
+            calcVal = eval(calcVal).toString();
+        } catch (e) {
+            calcVal = 'Error';
+        }
+        updateDisplay();
+    };
+</script>

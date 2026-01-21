@@ -1,0 +1,24 @@
+---
+interface Props {
+    title: string;
+    href: string;
+    icon: string; // SVG path or name
+    color?: string; // fallback color if needed
+}
+
+const { title, href, icon, color = "bg-primary" } = Astro.props;
+---
+
+<a href={href} class="flex flex-col items-center gap-3 p-3 w-28 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all group select-none">
+    <!-- Icon Container -->
+    <div class={`w-14 h-14 ${color} rounded-[18px] shadow-lg flex items-center justify-center text-primary text-2xl group-hover:scale-110 group-active:scale-95 transition-transform duration-300 ring-1 ring-white/10`}>
+        <div class="w-7 h-7">
+            <Fragment set:html={icon} />
+        </div>
+    </div>
+    
+    <!-- Label -->
+    <span class="text-xs text-text font-medium tracking-wide drop-shadow-sm text-center bg-surface/80 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5 group-hover:bg-surface transition-colors shadow-sm">
+        {title}
+    </span>
+</a>

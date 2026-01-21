@@ -1,0 +1,119 @@
+# Caelestia CLI
+
+[Repository Link](https://github.com/caelestia-dots/cli)
+
+The `caelestia` command is the glue that holds the Caelestia ecosystem together. It is a unified interface for controlling your desktop environment, developed to replace scattered shell scripts with a cohesive, robust Python application.
+
+## Why use the CLI?
+
+- **Centralized Control**: Instead of remembering `hyprctl` commands, `playerctl` flags, and custom script paths, you use one intuitive command.
+- **Scriptability**: It is designed to be used in keybinds and scripts.
+- **Theme Management**: It handles the complex task of syncing themes across Hyprland, GTK, QT, and Discord.
+
+## Installation
+
+### Arch Linux (AUR)
+
+```bash
+yay -S caelestia-cli
+```
+
+_Note: If you installed Caelestia via the installer, this is already set up._
+
+## Common Operations
+
+### 1. Controlling the Desktop
+
+The CLI provides high-level commands to manage windows and workspaces.
+
+- **Screenshots**: Uses Slurp and Grim to take clean screenshots.
+  ```bash
+  caelestia screenshot          # Interactive selection
+  caelestia screenshot screen   # Capture full screen
+  ```
+- **Screen Recording**:
+  ```bash
+  caelestia record              # Start/Stop recording
+  ```
+- **Special Workspaces**: Toggle "scratchpad" style workspaces easily.
+  ```bash
+  caelestia toggle special:term # Toggle the terminal scratchpad
+  ```
+
+### 2. Theming & Aesthetics
+
+One of the most powerful features is the ability to change the entire system look on the fly.
+
+- **Set Wallpaper**: Updates the wallpaper _and_ generates a color scheme from it.
+  ```bash
+  caelestia wallpaper set ~/Downloads/sunset.jpg
+  ```
+- **Change Color Scheme**: Switch between light/dark or different generation algorithms (Material, Monokai, etc).
+  ```bash
+  caelestia scheme set -n dynamic  # Regenerate from current wallpaper
+  caelestia scheme set -m dark     # Force dark mode
+  ```
+
+### 3. Shell Integration
+
+The CLI speaks directly to the Caelestia Shell daemon.
+
+- **Media Control**:
+  ```bash
+  caelestia shell mpris playPause
+  caelestia shell mpris next
+  ```
+- **Notifications**:
+  ```bash
+  caelestia shell notifs clear
+  ```
+
+## Configuration
+
+File: `~/.config/caelestia/cli.json`
+
+This file controls the behavior of the CLI tool itself.
+
+### Configuring Toggles
+
+You can define your own "toggles" for special workspaces. For example, if you want a dedicated Spotify toggle:
+
+```json
+"toggles": {
+    "music": {
+        "command": "spotify",      // Command to launch if not running
+        "match": [
+            { "class": "Spotify" } // Hyprland window rule to find it
+        ]
+    }
+}
+```
+
+Now you can run `caelestia toggle special:music`!
+
+### Theme Syncing
+
+Decide which parts of the system update when you change the wallpaper.
+
+```json
+"theme": {
+    "enableTerm": true,    // Update terminal colors?
+    "enableHypr": true,    // Update window borders?
+    "enableDiscord": false // Leave Discord alone?
+}
+```
+
+## Command Reference
+
+To see exactly what commands are available and their arguments, use the built-in help:
+
+```bash
+caelestia -h
+```
+
+For specific subcommands:
+
+```bash
+caelestia wallpaper -h
+caelestia scheme -h
+```

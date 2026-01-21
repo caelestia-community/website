@@ -1,0 +1,115 @@
+---
+import Logo from '../core/Logo.astro';
+const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+---
+
+<!-- Fixed Cohesive Bar Container -->
+<div class="fixed top-0 left-0 w-full h-12 px-4 flex justify-between items-center z-50 bg-surface/80 backdrop-blur-xl border-b border-white/5 text-sm font-medium select-none">
+    
+    <!-- Left Module: Workspaces -->
+    <div class="flex items-center gap-4">
+        <button onclick="window.toggleLauncher()" class="flex items-center justify-center w-8 h-8 hover:scale-110 transition-transform cursor-pointer rounded-lg hover:bg-white/5">
+            <Logo class="w-6 h-6 drop-shadow-md" />
+        </button>
+        
+        <div class="h-6 w-px bg-white/10 mx-1"></div>
+
+        <div class="flex gap-2 items-center">
+            <!-- Active Workspace (Pill) -->
+            <div class="w-8 h-1.5 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg shadow-primary/25 cursor-pointer hover:scale-105 transition-transform"></div>
+            <!-- Inactive Workspaces (Dots) -->
+            <div class="w-1.5 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-colors cursor-pointer"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-colors cursor-pointer"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-colors cursor-pointer"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-colors cursor-pointer"></div>
+        </div>
+    </div>
+
+    <!-- Center Module: Clock -->
+    <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 group cursor-default px-4 py-1 rounded-lg hover:bg-white/5 transition-colors">
+         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-primary group-hover:rotate-180 transition-transform duration-500"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+         <span class="text-text font-bold tracking-wide">{time}</span>
+    </div>
+
+    <!-- Right Module: System Tray -->
+    <div class="flex items-center gap-4">
+        
+        <div class="flex items-center gap-2 text-subtext">
+            <!-- Theme Toggle -->
+            <button onclick="window.toggleThemePanel()" class="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer hover:text-text" aria-label="Open Theme Panel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 1 0 10 10 7 7 0 1 0-10-10z"/></svg>
+            </button>
+
+            <div class="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer hover:text-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
+            </div>
+            <div class="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer hover:text-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 15 6 9 12 2 18 9 13 15"/><path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1v-4"/></svg>
+            </div>
+        </div>
+
+        <div class="h-6 w-px bg-white/10"></div>
+
+        <button class="text-error hover:text-red-300 hover:bg-red-500/10 hover:scale-105 transition-all p-2 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+        </button>
+    </div>
+</div>
+
+<script is:inline>
+    function initTheme() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const iconDark = document.getElementById('icon-dark');
+        const iconLight = document.getElementById('icon-light');
+        const html = document.documentElement;
+
+        if (!themeToggle || !iconDark || !iconLight) {
+            console.error('Theme toggle elements not found');
+            return;
+        }
+
+        // Check saved theme or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'light') {
+            html.classList.add('light');
+            updateIcons(true);
+        } else if (savedTheme === 'dark') {
+            html.classList.remove('light');
+            updateIcons(false);
+        } else {
+            // Default to dark per design, or system preference
+            // Since our CSS defaults to dark variables on root, we only add .light if explicitly light
+            updateIcons(false);
+        }
+
+        // Toggle Logic
+        themeToggle.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent accidental navigation if nested
+            html.classList.toggle('light');
+            const isLight = html.classList.contains('light');
+            console.log('Theme toggled. Is Light:', isLight);
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            updateIcons(isLight);
+        });
+
+        function updateIcons(isLight) {
+            if (isLight) {
+                iconLight.classList.add('hidden');
+                iconLight.classList.remove('block');
+                iconDark.classList.remove('hidden');
+                iconDark.classList.add('block');
+            } else {
+                iconDark.classList.add('hidden');
+                iconDark.classList.remove('block');
+                iconLight.classList.remove('hidden');
+                iconLight.classList.add('block');
+            }
+        }
+    }
+
+    // Run on load and after regular Astro transitions if enabled
+    document.addEventListener('DOMContentLoaded', initTheme);
+    document.addEventListener('astro:page-load', initTheme);
+</script>
