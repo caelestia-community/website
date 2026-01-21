@@ -4,7 +4,7 @@
 <script is:inline>
     // Global State
     window.themeState = {
-        theme: localStorage.getItem('theme') || 'default',
+        theme: localStorage.getItem('theme') || 'official',
     };
 
     // --- Color Extraction Utilities ---
@@ -141,7 +141,7 @@
     // Apply immediate wallpaper
     // Note: DOMContentLoaded is needed because target elements might not exist yet if script runs too early in head
     document.addEventListener('DOMContentLoaded', () => {
-const savedWallpaper = localStorage.getItem('wallpaper') || 'https://images.unsplash.com/photo-1464618663641-bbdd760ae84a?q=80&w=2070&auto=format&fit=crop';
+const savedWallpaper = localStorage.getItem('wallpaper') || '/wallpapers/wallpaper-2.jpg';
         window.setWallpaper(savedWallpaper);
     });
 

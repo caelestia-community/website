@@ -13,16 +13,21 @@ const importedSchemes = [
   { id: "scheme-rosepine-main-dark", name: "Rose Pine", color: "#c9bfff" },
   { id: "scheme-rosepine-moon-dark", name: "Rose Pine Moon", color: "#c6bfff" },
   { id: "scheme-rosepine-dawn-light", name: "Rose Pine Dawn", color: "#897324" },
-  { id: "scheme-shadotheme-default-dark", name: "Shadotheme", color: "#bfc1ff" }
+  { id: "scheme-shadotheme-default-dark", name: "Shadotheme", color: "#bfc1ff" },
+  { id: "scheme-dracula-dark", name: "Dracula", color: "#bd93f9" },
+  { id: "scheme-nord-dark", name: "Nord", color: "#88c0d0" },
+  { id: "scheme-tokyo-night-dark", name: "Tokyo Night", color: "#7aa2f7" },
+  { id: "scheme-cyberpunk-dark", name: "Cyberpunk", color: "#ff0099" },
+  { id: "scheme-synthwave84-dark", name: "Synthwave '84", color: "#ff71ce" }
 ];
 ---
 
-<div id="theme-panel" class="fixed inset-0 z-[60] hidden opacity-0 transition-opacity duration-300">
+<div id="theme-panel" class="absolute inset-0 hidden opacity-0 transition-opacity duration-300 z-[60]">
     <!-- Close Layer -->
     <div class="absolute inset-0 bg-transparent" id="theme-panel-backdrop"></div>
     
     <!-- Panel -->
-    <div class="absolute bottom-20 md:bottom-4 left-4 right-4 md:left-16 md:right-auto md:-ml-px md:w-[400px] bg-background rounded-2xl md:rounded-l-none md:rounded-r-2xl border border-white/5 md:border-l-0 shadow-2xl flex flex-col overflow-hidden max-h-[60vh] md:max-h-[calc(100vh-2rem)] origin-bottom md:origin-bottom-left animate-slide-up md:animate-slide-right">
+    <div class="absolute bottom-20 md:bottom-24 left-4 right-4 md:left-0 md:right-auto md:-ml-px md:w-[400px] bg-background rounded-2xl md:rounded-l-none md:rounded-r-2xl  flex flex-col overflow-hidden max-h-[60vh] md:max-h-[calc(100vh-2rem)] origin-bottom md:origin-bottom-left animate-slide-up md:animate-slide-right">
 
         <div class="p-4 border-b border-white/5 flex justify-between items-center bg-white/5">
             <h3 class="font-bold text-text">Theme & Appearance</h3>
@@ -33,19 +38,14 @@ const importedSchemes = [
             <!-- Wallpaper -->
              <div class="space-y-3">
                 <label class="text-xs text-subtext font-bold uppercase tracking-wider">Wallpaper</label>
-                <div class="grid grid-cols-2 gap-2">
-                    <button data-wallpaper="/wallpapers/wallpaper-1.jpg" class="aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105" style="background-image: url('/wallpapers/wallpaper-1.jpg')"></button>
-                    <button data-wallpaper="/wallpapers/wallpaper-2.jpg" class="aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105" style="background-image: url('/wallpapers/wallpaper-2.jpg')"></button>
-                    <button data-wallpaper="/wallpapers/wallpaper-3.png" class="aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105" style="background-image: url('/wallpapers/wallpaper-3.png')"></button>
-                    <button data-wallpaper="/wallpapers/wallpaper-4.png" class="aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105" style="background-image: url('/wallpapers/wallpaper-4.png')"></button>
+                <div id="wallpaper-list" class="flex gap-3 overflow-x-auto pb-2 snap-x scrollbar-thin">
+                    <button data-wallpaper="/wallpapers/wallpaper-1.jpg" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-1.jpg')"></button>
+                    <button data-wallpaper="/wallpapers/wallpaper-2.jpg" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-2.jpg')"></button>
+                    <button data-wallpaper="/wallpapers/wallpaper-3.png" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-3.png')"></button>
+                    <button data-wallpaper="/wallpapers/wallpaper-4.png" class="flex-none w-40 aspect-video rounded-lg bg-cover bg-center ring-2 ring-primary/0 hover:ring-primary transition-all hover:scale-105 snap-center" style="background-image: url('/wallpapers/wallpaper-4.png')"></button>
                 </div>
 
-                <div class="flex gap-2">
-                    <input type="text" id="custom-wallpaper-input" placeholder="Custom Image URL + Enter" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-text placeholder:text-subtext/50 focus:outline-none focus:border-primary transition-colors" />
-                    <button onclick="applyCustomWallpaper()" class="bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg px-3 py-2 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </button>
-                </div>
+
             </div>
 
             <!-- Themes -->
@@ -162,7 +162,7 @@ const importedSchemes = [
     });
 
     // --- Wallpaper Button Logic (Event Delegation) ---
-    const wallpaperGrid = document.querySelector('#theme-panel .grid');
+    const wallpaperGrid = document.getElementById('wallpaper-list');
     if (wallpaperGrid) {
         wallpaperGrid.addEventListener('click', (e) => {
             const btn = e.target.closest('button[data-wallpaper]');
@@ -175,39 +175,5 @@ const importedSchemes = [
         });
     }
 
-    // --- Custom Wallpaper Logic ---
-    const wallpaperInput = document.getElementById('custom-wallpaper-input');
-    
-    if (wallpaperInput) {
-        wallpaperInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                window.applyCustomWallpaper();
-            }
-             // Prevent panel closing when clicking inside input or typing
-            e.stopPropagation();
-        });
-    }
 
-    window.applyCustomWallpaper = () => {
-        const input = document.getElementById('custom-wallpaper-input');
-        if (input && input.value) {
-            console.log('Applying custom wallpaper:', input.value);
-            if(window.setWallpaper) {
-                window.setWallpaper(input.value);
-                
-                // Visual feedback (temp)
-                const originalBtnText = input.nextElementSibling.innerHTML;
-                const btn = input.nextElementSibling;
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
-                btn.classList.add('text-success', 'bg-success/10');
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalBtnText;
-                    btn.classList.remove('text-success', 'bg-success/10');
-                }, 1500);
-            } else {
-                console.error('setWallpaper is not defined!');
-            }
-        }
-    };
 </script>

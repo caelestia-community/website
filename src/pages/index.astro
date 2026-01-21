@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/desktop/Window.astro';
-import DesktopIcon from '../components/desktop/DesktopIcon.astro';
+
 import Launcher from '../components/desktop/Launcher.astro';
 import ThemePanel from '../components/desktop/ThemePanel.astro';
 import SideBar from '../components/desktop/SideBar.astro';
@@ -36,21 +36,23 @@ const importedSchemes = [
     <!-- ... (Background logic in ThemeManager) ... -->
     <!-- System UI (Global Overlays) -->
     <BootSplash />
-    <Launcher />
     <SideBar />
-    <ThemePanel />
-    <ContextMenu />
-
     <!-- Desktop Viewport (Constrained Content) -->
     <!-- Sidebar is 4rem (w-16). We want ~0.75rem gap (p-3 equivalent). Left = 4rem + 0.75rem = 4.75rem -->
-    <main class="fixed inset-0 md:top-3 md:right-3 md:bottom-3 md:left-[4.75rem] md:rounded-3xl overflow-hidden shadow-2xl bg-black isolate z-0 group/desktop pb-16 md:pb-0">
+    <main class="fixed inset-0 md:top-3 md:right-3 md:bottom-3 md:left-[4.5rem] md:rounded-3xl overflow-hidden shadow-2xl bg-background isolate z-0 group/desktop pb-16 md:pb-0">
         
+    
         <!-- Wallpaper (Moved inside Viewport) -->
         <div id="wallpaper" class="absolute inset-0 bg-cover bg-center -z-10 bg-background transition-colors duration-500 wallpaper-target">
             <!-- Vignette & Tint -->
-            <div class="absolute inset-0" style="background: radial-gradient(circle at center, transparent 0%, rgb(var(--color-background) / 0.8) 100%);"></div>
-            <div class="absolute inset-0 bg-background/40 backdrop-blur-[1px]"></div>
+            <div class="absolute inset-0" style="background: radial-gradient(circle at center, transparent 0%, rgb(var(--color-background) / 0.3) 100%);"></div>
+            <div class="absolute inset-0 bg-background/10 backdrop-blur-[1px]"></div>
         </div>
+        
+        <ThemePanel />
+        <Launcher />
+        <ContextMenu />
+        
 
         <!-- Desktop Content -->
         <div class="relative w-full h-full">
@@ -222,7 +224,10 @@ const importedSchemes = [
         // Show menu
         contextMenu.classList.remove('hidden');
         
-        // Position
+        // Position relative to the main desktop container
+        const mainEl = document.querySelector('main');
+        const rect = mainEl.getBoundingClientRect();
+        
         // Ensure availability in viewport
         let x = e.clientX;
         let y = e.clientY;
@@ -230,8 +235,9 @@ const importedSchemes = [
         if (x + 200 > window.innerWidth) x = window.innerWidth - 210;
         if (y + 200 > window.innerHeight) y = window.innerHeight - 210;
         
-        contextMenu.style.left = `${x}px`;
-        contextMenu.style.top = `${y}px`;
+        // Adjust for container offset
+        contextMenu.style.left = `${x - rect.left}px`;
+        contextMenu.style.top = `${y - rect.top}px`;
     });
 
     // Close on click anywhere

@@ -9,7 +9,7 @@ const items = [
 ];
 ---
 
-<div id="context-menu" class="fixed z-[100] hidden min-w-[200px] p-1.5 rounded-xl bg-[#1a1b26]/90 backdrop-blur-xl border border-white/10 shadow-2xl animate-scale-in text-sm select-none ring-1 ring-white/5">
+<div id="context-menu" class="absolute z-[100] hidden min-w-[200px] p-1.5 rounded-xl bg-[#1a1b26]/90 backdrop-blur-xl border border-white/10 shadow-2xl animate-scale-in text-sm select-none ring-1 ring-white/5">
     {items.map((item) => (
         item.type === 'separator' ? (
             <div class="h-px bg-white/5 my-1 mx-2" />

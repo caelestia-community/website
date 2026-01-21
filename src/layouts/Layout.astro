@@ -426,6 +426,93 @@ const { title } = Astro.props;
         --color-error: 255 180 171;
     }
 
+    /* --- New Added Themes --- */
+
+    html.scheme-dracula-dark {
+        --color-background: 40 42 54;
+        --color-surface: 68 71 90;
+        --color-overlay: 98 114 164;
+        --color-text: 248 248 242;
+        --color-subtext: 189 147 249;
+        --color-muted: 98 114 164;
+        
+        --color-primary: 255 121 198;
+        --color-secondary: 189 147 249;
+        --color-accent: 255 184 108;
+        
+        --color-success: 80 250 123;
+        --color-warning: 241 250 140;
+        --color-error: 255 85 85;
+    }
+
+    html.scheme-nord-dark {
+        --color-background: 46 52 64;
+        --color-surface: 59 66 82;
+        --color-overlay: 67 76 94;
+        --color-text: 236 239 244;
+        --color-subtext: 216 222 233;
+        --color-muted: 76 86 106;
+        
+        --color-primary: 136 192 208;
+        --color-secondary: 129 161 193;
+        --color-accent: 94 129 172;
+        
+        --color-success: 163 190 140;
+        --color-warning: 235 203 139;
+        --color-error: 191 97 106;
+    }
+
+    html.scheme-tokyo-night-dark {
+        --color-background: 26 27 38;
+        --color-surface: 36 40 59;
+        --color-overlay: 65 72 104;
+        --color-text: 192 202 245;
+        --color-subtext: 169 177 214;
+        --color-muted: 86 95 137;
+        
+        --color-primary: 122 162 247;
+        --color-secondary: 187 154 247;
+        --color-accent: 125 207 255;
+        
+        --color-success: 158 206 106;
+        --color-warning: 224 175 104;
+        --color-error: 247 118 142;
+    }
+
+    html.scheme-cyberpunk-dark {
+        --color-background: 8 4 33;     /* Deep Blue/Void */
+        --color-surface: 26 23 48;      /* Panel BG */
+        --color-overlay: 56 46 89;
+        --color-text: 255 240 31;       /* Cyber Yellow */
+        --color-subtext: 45 226 230;    /* Cyan */
+        --color-muted: 105 105 105;
+        
+        --color-primary: 255 0 153;     /* Neon Pink */
+        --color-secondary: 110 0 255;   /* Electric Violet */
+        --color-accent: 0 255 159;      /* Neon Green */
+        
+        --color-success: 57 255 20;     /* Terminal Green */
+        --color-warning: 255 240 31;    /* Yellow */
+        --color-error: 255 42 109;      /* Radical Red */
+    }
+
+    html.scheme-synthwave84-dark {
+        --color-background: 38 35 53;   /* Deep Purple */
+        --color-surface: 49 46 72;      /* Lighter Purple */
+        --color-overlay: 68 65 90;
+        --color-text: 255 255 255;      /* White */
+        --color-subtext: 45 226 230;    /* Cyan Glow */
+        --color-muted: 132 143 176;
+        
+        --color-primary: 255 113 206;   /* Hot Pink */
+        --color-secondary: 1 205 254;   /* Neon Blue */
+        --color-accent: 5 255 161;      /* Neon Green */
+        
+        --color-success: 57 255 20;
+        --color-warning: 255 240 31;
+        --color-error: 255 65 81;
+    }
+
 	html {
         font-family: 'Rubik', sans-serif;
         color: rgb(var(--color-text));
