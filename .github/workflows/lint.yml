@@ -12,16 +12,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - uses: actions/setup-node@v6
-      with:
-        node-version: 25.x
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 25.x
 
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-    - name: Run eslint on changed files
-      uses: tj-actions/eslint-changed-files@v25
-      with:
-        config_path: '/eslint.config.mjs'
+      - name: Run eslint on changed files
+        uses: tj-actions/eslint-changed-files@v25
+        with:
+          config_path: '/eslint.config.mjs'
+
+  markdownlint:
+    name: markdownlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: DavidAnson/markdownlint-cli2-action@v22
+        with:
+          config: '/.markdownlint-cli2.jsonc'
