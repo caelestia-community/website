@@ -33,4 +33,4 @@ jobs:
     steps:
       - uses: DavidAnson/markdownlint-cli2-action@v22
         with:
-          config: '.markdownlint-cli2.jsonc'
+          config: './.markdownlint-cli2.jsonc'
