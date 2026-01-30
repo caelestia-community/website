@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3014",
+    "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start -p 3014",
+    "start": "next start -p 3001",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write --ignore-unknown \"**/*.{ts,tsx,scss}\"",
     "prettier:test": "prettier --check \"**/*.{ts,tsx,scss}\"",
