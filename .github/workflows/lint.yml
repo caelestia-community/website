@@ -46,3 +46,23 @@ jobs:
         if: steps.changed-files.output.any_changed == 'true'
         with:
           config: '.markdownlint-cli2.jsonc'
+
+  stylelint:
+    name: stylelint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Detect changed files
+        uses: tj-actions/changed-files@v47
+        id: changed-files
+        with:
+          files: |
+            **/*.scss
+
+      - name: Run stylelint on changed files
+        uses: actions-hub/stylelint@master
+        if: steps.changed-files.output.any_changed == 'true'
+        env:
+          PATTERN: "*.scss"
