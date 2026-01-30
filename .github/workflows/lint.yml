@@ -31,6 +31,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: DavidAnson/markdownlint-cli2-action@v22
+      - uses: actions/checkout@v6
+
+      - name: Detect changed files
+        uses: tj-actions/changed-files@47
+        id: changed-files
         with:
-          config: './.markdownlint-cli2.jsonc'
+          files: |
+            **/*.md
+            **/*.mdx
+
+      - name: Run markdownlint on changed files
+        uses: DavidAnson/markdownlint-cli2-action@v22
+        if: steps.changed-files.output.any_changed == 'true'
+        with:
+          config: '.markdownlint-cli2.jsonc'
