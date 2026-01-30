@@ -1,0 +1,8 @@
+{
+    "config": {
+        "default": true,
+        "MD030": false
+    },
+    "globs": ["**/*.md"],
+    "ignores": ["node_modules", "vendor", "**/CHANGELOG.md"]
+}

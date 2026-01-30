@@ -1,0 +1,14 @@
+{
+  "Common": {
+    "caelestiaShell": "{caelestia} Shell",
+    "cli": "CLI",
+    "dots": "Dots",
+    "joinDiscord": "Join us on Discord!",
+    "shell": "Shell"
+  },
+  "NotFound": {
+    "content": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+    "oops": "Oops!",
+    "pageNotFound": "404 - Page not found"
+  }
+}
