@@ -1,3 +1,5 @@
+import { Header } from '@/components/layout/header';
+
 export default async function Home() {
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -8,8 +10,10 @@ export default async function Home() {
 
   return (
     <>
-      <div className="appFrame">
-        <main className="home w-full">
+      <div className="app-frame">
+        <Header />
+
+        <main className="home">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{

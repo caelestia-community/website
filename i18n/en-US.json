@@ -4,7 +4,11 @@
     "cli": "CLI",
     "dots": "Dots",
     "joinDiscord": "Join us on Discord!",
-    "shell": "Shell"
+    "shell": "Shell",
+    "getStarted": "Get Started",
+    "docs": "Docs",
+    "liveTitle": "Unofficial Live Image",
+    "liveDesc": "We have a work-in-progress, unofficial live image! If you're interested in trying it out, <clickHere>click here</clickHere>! Make sure to read the disclaimer!"
   },
   "NotFound": {
     "content": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
