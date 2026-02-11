@@ -1,0 +1,45 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px 0 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-caskaydia-cove);
+    font-weight: 700;
+    gap: 12px;
+    color: var(--m3onSurface);
+
+    & span::before {
+        display: none;
+    }
+
+    & svg {
+        width: 30px;
+
+        & path {
+            fill: var(--m3onSurface);
+        }
+    }
+}
+
+.actions {
+    display: flex;
+    background-color: var(--m3surfaceContainerLow);
+    border-radius: calc(infinity * 1px);
+    padding: 0 10px;
+
+    a {
+        background: var(--m3onSurface);
+        border-radius: calc(infinity * 1px);
+        padding: 3px 5px;
+        color: var(--m3surface);
+        font-weight: 700;
+        font-size: 12px;
+    }
+}
+
+
+// get started, docs, news, discord, githhub

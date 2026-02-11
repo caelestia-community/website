@@ -37,6 +37,12 @@ export default async function Landing() {
       >
         {t('Common.joinDiscord')}
       </Link>
+      <div className="surface-container">
+        <strong>{t('Common.liveTitle')}</strong>
+        <p>{t.rich('Common.liveDesc', {
+          clickHere: (chunks) => <a href="https://packages.caelestiashell.com/iso"><span>{chunks}</span></a>
+        })}</p>
+      </div>
     </div>
   );
 }
