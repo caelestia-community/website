@@ -1,18 +1,33 @@
 @use 'tailwindcss';
 
 :root {
-    --background: #303945;
-    --foreground: #ebf4ff;
+    --m3background: #191114;
+    --m3onBackground: #efdfe2;
+    --m3surface: #191114;
+    --m3surfaceContainerLow: #22191c;
+    --m3surfaceContainer: #261d20;
+    --m3onSurface: #efdfe2;
+    --m3onSurfaceVariant: #d5c2c6;
+    --m3outline: #9e8c91;
+    --m3outlineVariant: #514347;
+    --m3primary: #ffb0ca;
+    --m3primaryContainer: #6f334a;
+    --m3onPrimaryContainer: #ffd9e3;
+    --m3secondary: #e2bdc7;
+    --m3onSecondary: #422932;
+    --m3secondaryContainer: #5a3f48;
+    --m3onSecondaryContainer: #ffd9e3;
 }
 
 @theme inline {
-    --color-background: var(--dark);
-    --color-foreground: var(--lightest);
+    --color-background: var(--m3background);
+    --color-foreground: var(--m3foreground);
 }
 
 @layer base {
     a {
         transition: all 0.3s cubic-bezier(0.42, 0.01, 0.58, 1);
+        color: var(--m3onSurfaceVariant);
 
         & span {
             position: relative;
@@ -25,7 +40,7 @@
                 height: 1px;
                 bottom: 0;
                 left: 0;
-                background-color: var(--foreground);
+                background-color: var(--m3onSurface);
                 transform: scaleX(0);
                 transition: transform 0.3s ease;
             }
@@ -40,12 +55,28 @@
         font-size: 32px;
     }
 
+    main {
+        background-color: var(--m3surfaceContainer);
+        width: calc(100vw - 20px);
+        height: calc(100vh - 20px);
+        margin: 10px;
+        border-radius: 25px;
+    }
+
+    .app-frame {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--m3background);
+        height: 100vh;
+    }
+
     .content-frame {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
         align-items: center;
         justify-content: center;
+        margin: 0 12px;
     }
 
     .links {
@@ -77,11 +108,23 @@
             background-color: #7289da;
         }
     }
+
+    .surface-container {
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--radius-lg);
+        background-color: var(--m3surfaceContainer);
+        color: var(--m3onSurface);
+        padding: 6px 12px;
+        margin-top: 12px;
+        width: 100%;
+        max-width: 500px;
+    }
 }
 
 body {
-    background: var(--lightest);
-    color: var(--dark);
+    background: var(--m3surface);
+    color: var(--m3onSurface);
     font-family: var(--font-rubik), Arial, Helvetica, sans-serif;
     font-size: 14px;
     height: 100%;
