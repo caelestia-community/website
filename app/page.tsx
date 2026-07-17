@@ -54,7 +54,7 @@ export default async function Home() {
           {t('Common.joinDiscord')}
         </Link>
         <div className="surface-container">
-          <strong>{t('Common.liveTitle')}</strong>
+          <h2>{t('Common.liveTitle')}</h2>
           <p>{t.rich('Common.liveDesc', {
             clickHere: (chunks) => <a href="https://packages.caelestiashell.com/iso"><span>{chunks}</span></a>
           })}</p>
