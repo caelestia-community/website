@@ -56,21 +56,6 @@
         font-size: 32px;
     }
 
-    main {
-        background-color: var(--m3surfaceContainer);
-        width: calc(100vw - 20px);
-        height: calc(100vh - 20px);
-        margin: 10px;
-        border-radius: 25px;
-    }
-
-    .app-frame {
-        display: flex;
-        flex-direction: column;
-        background-color: var(--m3background);
-        height: 100vh;
-    }
-
     .content-frame {
         display: flex;
         flex-direction: column;
