@@ -1,15 +1,13 @@
-# Caelestia Shell
+# Caelestia Website
 
-This repository is the home of the Caelestia Shell community website. Caelestia
-Shell was created by [soramane], who has graciously [given us permission] to
-create a website for the project.
+This repository is the home of Caelestia Shell [website].
 
-At this point, the website itself is just an idea - so you probably want the
-[Caelestia Shell repository] or [Caelestia dotfiles repository]. In the future,
-we hope to make this site the definitive home for information regarding
-Caelestia Shell.
+At this point, the website itself is still in very early development. While you
+are welcome to visit it, you probably want the [Caelestia Shell repository] or
+[Caelestia dotfiles repository]. If you want to get involved, visit the
+website-dev channel or get in touch with Evertiro on our [Discord].
 
-[soramane]: https://github.com/soramanew
-[given us permission]: https://github.com/caelestia-dots/shell/issues/762#issuecomment-3612160882
+[website]: https://caelestiashell.com
 [Caelestia Shell repository]: https://github.com/caelestia-dots/shell
 [Caelestia dotfiles repository]: https://github.com/caelestia-dots/caelestia
+[Discord]: https://discord.gg/BGDCFCmMBk
